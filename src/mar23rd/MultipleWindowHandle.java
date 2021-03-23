@@ -1,4 +1,4 @@
-package mar22nd;
+package mar23rd;
 
 import java.awt.AWTException;
 import java.util.Iterator;
@@ -7,12 +7,9 @@ import java.util.Set;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.server.handler.SwitchToWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import utils.WindowUtils;
 
 public class MultipleWindowHandle {
 	
@@ -50,15 +47,66 @@ WebDriver driver;
 		
 		driver.findElement(By.xpath("//img[contains(@src,'google-play')]/parent::a")).click();
 		
-		WindowUtils.switchWindow(driver,"//a[text()='See more']");
-					
+		
+		Set<String> windowIds=driver.getWindowHandles();
+		
+		
+		Iterator<String> it=windowIds.iterator();
+		
+		
+		while(it.hasNext())
+		{
+			
+			
+			driver.switchTo().window(it.next());
+			
+			try
+			{
+			driver.findElement(By.xpath("//a[text()='See more']")).click();
+			break;
+			}
+			catch(Exception e)
+			{
+				
+				System.out.println("Not Switched into Expected Window");
+			}
+			
+			
+		}
+		
+		
 		driver.switchTo().window(homeWindowId);
 		
 		driver.findElement(By.xpath("//img[contains(@src,'ios-button')]/parent::a")).click();
 		
-		WindowUtils.switchWindow(driver,"//a[text()='Terms of Service']");
 		
-					
+		windowIds=driver.getWindowHandles();
+		
+		
+		it=windowIds.iterator();
+		
+		
+		while(it.hasNext())
+		{
+			
+			
+			driver.switchTo().window(it.next());
+			
+			try
+			{
+			driver.findElement(By.xpath("//a[text()='Terms of Service']")).click();
+			break;
+			}
+			catch(Exception e)
+			{
+				
+				System.out.println("Not Switched into Expected Window");
+			}
+			
+			
+		}
+		
+		
 		driver.switchTo().window(homeWindowId);
 		
 				
